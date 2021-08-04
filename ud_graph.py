@@ -146,6 +146,28 @@ class UndirectedGraph:
         """
         Return true if provided path is valid, False otherwise
         """
+        if not path:
+            return True
+
+        if len(path) == 1:
+            if path[0] in self.adj_list.keys():
+                return True
+            else:
+                return False
+
+        index = 0
+        current = path[index]
+        next = path[index + 1]
+
+        while index < len(path)-1:
+            current = path[index]
+            next = path[index + 1]
+            if next not in self.adj_list[current]:
+                return False
+
+            index += 1
+
+        return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -205,7 +227,6 @@ if __name__ == '__main__':
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
     print(g.get_edges(), g.get_vertices(), sep='\n')
 
-    """
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
@@ -213,6 +234,7 @@ if __name__ == '__main__':
     for path in test_cases:
         print(list(path), g.is_valid_path(list(path)))
 
+    """
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
     edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
