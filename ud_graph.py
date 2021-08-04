@@ -81,7 +81,7 @@ class UndirectedGraph:
         if v == u:
             return None
 
-        elif v not in self.adj_list:
+        elif v not in self.adj_list or u not in self.adj_list:
             return None
 
         elif v not in self.adj_list[u]:
