@@ -1,7 +1,7 @@
 # Course: CS261 - Data Structures
-# Author:
-# Assignment:
-# Description:
+# Author: Joel Swenddal
+# Assignment: 6
+# Description: Directed Graph Implementation -- using Adjacency Matrix
 
 class DirectedGraph:
     """
@@ -127,7 +127,6 @@ if __name__ == '__main__':
         g.add_edge(src, dst, weight)
     print(g)
 
-
     print("\nPDF - method get_edges() example 1")
     print("----------------------------------")
     g = DirectedGraph()
@@ -136,7 +135,6 @@ if __name__ == '__main__':
              (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     g = DirectedGraph(edges)
     print(g.get_edges(), g.get_vertices(), sep='\n')
-
 
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
@@ -147,7 +145,6 @@ if __name__ == '__main__':
     for path in test_cases:
         print(path, g.is_valid_path(path))
 
-
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -155,7 +152,6 @@ if __name__ == '__main__':
     g = DirectedGraph(edges)
     for start in range(5):
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
-
 
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
@@ -173,7 +169,6 @@ if __name__ == '__main__':
         g.add_edge(src, dst)
         print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
-
 
     print("\nPDF - dijkstra() example 1")
     print("--------------------------")

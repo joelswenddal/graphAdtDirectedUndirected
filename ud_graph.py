@@ -1,7 +1,10 @@
-# Course: 
-# Author: 
-# Assignment: 
-# Description:
+# Course: CS261 - Data Structures
+# Author: Joel Swenddal
+# Assignment: 6
+# Description: Undirected Graph Implementation -- using Adjacency List
+
+import heapq
+from collections import deque
 
 
 class UndirectedGraph:
@@ -44,70 +47,127 @@ class UndirectedGraph:
         """
         Add new vertex to the graph
         """
-        
+        if v not in self.adj_list:
+            self.adj_list[v] = []
+
+        return None
+
     def add_edge(self, u: str, v: str) -> None:
         """
         Add edge to the graph
         """
-        
+        if u == v:
+            return None
+
+        if u not in self.adj_list:
+            self.add_vertex(u)
+
+        if v not in self.adj_list:
+            self.add_vertex(v)
+
+        if v not in self.adj_list[u]:
+            self.adj_list[u].append(v)
+
+        if u not in self.adj_list[v]:
+            self.adj_list[v].append(u)
+
+        return None
 
     def remove_edge(self, v: str, u: str) -> None:
         """
-        Remove edge from the graph
+        Takes two vertices remove edge between them
+        from the graph. 
         """
-        
+        if v == u:
+            return None
+
+        elif v not in self.adj_list:
+            return None
+
+        elif v not in self.adj_list[u]:
+            return None
+
+        else:
+            self.adj_list[u].remove(v)
+            self.adj_list[v].remove(u)
+
+        return None
 
     def remove_vertex(self, v: str) -> None:
         """
         Remove vertex and all connected edges
         """
-        
 
-    def get_vertices(self) -> []:
+        if v in self.adj_list:
+
+            # if list is empty
+            if not self.adj_list[v]:
+                self.adj_list.pop(v)
+                return None
+            # not empty
+            for node in self.adj_list[v]:
+                self.adj_list[node].remove(v)
+            self.adj_list.pop(v)
+
+        return None
+
+    def get_vertices(self) -> list:
         """
         Return list of vertices in the graph (any order)
         """
-       
 
-    def get_edges(self) -> []:
+        if not self.adj_list:
+            return []
+
+        return self.adj_list.keys()
+
+    def get_edges(self) -> list:
         """
-        Return list of edges in the graph (any order)
+        Return list of edges in the graph (any order).
+        Edges are represented as tuples with two elements
+        (the two adjacent vertices).
         """
-        
+        node_list = self.get_vertices()
+        edge_list = []
+
+        if not node_list:
+            return node_list
+
+        for node in node_list:
+            for edge in self.adj_list[node]:
+                if self.adj_list[node]:
+                    edge_tup = (node, edge) if node < edge else (edge, node)
+                if edge_tup not in edge_list:
+                    edge_list.append(edge_tup)
+
+        return edge_list
 
     def is_valid_path(self, path: []) -> bool:
         """
         Return true if provided path is valid, False otherwise
         """
-       
 
     def dfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
         """
-       
 
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
-        
 
     def count_connected_components(self):
         """
         Return number of connected componets in the graph
         """
-      
 
     def has_cycle(self):
         """
         Return True if graph contains a cycle, False otherwise
         """
-       
-
-   
 
 
 if __name__ == '__main__':
@@ -128,7 +188,6 @@ if __name__ == '__main__':
         g.add_edge(u, v)
     print(g)
 
-
     print("\nPDF - method remove_edge() / remove_vertex example 1")
     print("----------------------------------------------------")
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
@@ -139,7 +198,6 @@ if __name__ == '__main__':
     g.remove_vertex('D')
     print(g)
 
-
     print("\nPDF - method get_vertices() / get_edges() example 1")
     print("---------------------------------------------------")
     g = UndirectedGraph()
@@ -147,14 +205,13 @@ if __name__ == '__main__':
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
     print(g.get_edges(), g.get_vertices(), sep='\n')
 
-
+    """
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
     test_cases = ['ABC', 'ADE', 'ECABDCBE', 'ACDECB', '', 'D', 'Z']
     for path in test_cases:
         print(list(path), g.is_valid_path(list(path)))
-
 
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
@@ -167,7 +224,6 @@ if __name__ == '__main__':
     for i in range(1, len(test_cases)):
         v1, v2 = test_cases[i], test_cases[-1 - i]
         print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
-
 
     print("\nPDF - method count_connected_components() example 1")
     print("---------------------------------------------------")
@@ -185,7 +241,6 @@ if __name__ == '__main__':
         print(g.count_connected_components(), end=' ')
     print()
 
-
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
     edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
@@ -201,3 +256,4 @@ if __name__ == '__main__':
         u, v = edge
         g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
         print('{:<10}'.format(case), g.has_cycle())
+    """
