@@ -302,11 +302,7 @@ class UndirectedGraph:
         """
         Return True if graph contains a cycle, False otherwise
         """
-
-        visited_dict = {}
         vertices = self.get_vertices()
-        # visited dictionary to track visited vertices
-        # initialize all to False
 
         for each in vertices:
 
