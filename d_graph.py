@@ -86,10 +86,10 @@ class DirectedGraph:
     def remove_edge(self, src: int, dst: int) -> None:
         """
         Takes a source and destination vertice and
-        remove the edge between them if it exists
+        removes the edge between them if it exists
         in the graph and if both vertices exist.
         """
-        if (src >= self.v_count) or (dst >= self.v_count) or (src == dst):
+        if (src < 0) or (dst < 0) or (src == dst) or (src >= self.v_count) or (dst >= self.v_count):
             return None
 
         self.adj_matrix[src][dst] = 0
