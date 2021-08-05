@@ -3,6 +3,10 @@
 # Assignment: 6
 # Description: Directed Graph Implementation -- using Adjacency Matrix
 
+import heapq
+from collections import deque
+
+
 class DirectedGraph:
     """
     Class to implement directed weighted graph
@@ -164,17 +168,86 @@ class DirectedGraph:
 
         return True
 
-    def dfs(self, v_start, v_end=None) -> []:
+    def dfs(self, v_start, v_end=None) -> list:
         """
-        TODO: Write this implementation
+        Takes an starting vertice (v_start) and
+        an optional ending vertice (v_end) and
+        performs a depth-first search. Returns a 
+        list of vertices in the order they were
+        visited.
         """
-        pass
+        path_list = []
 
-    def bfs(self, v_start, v_end=None) -> []:
+        if v_start < 0 or v_start >= self.v_count:
+            return path_list
+
+        if v_end is None or v_end < 0 or v_end >= self.v_count:
+            v_end = None
+
+        if v_start == v_end:
+            path_list.append(v_start)
+            return path_list
+
+        # push starting vertice onto stack
+        current = v_start
+        stack = [current]
+
+        # while stack not empty
+        while stack and current != v_end:
+            current = stack.pop()
+
+            if current not in path_list:
+                path_list.append(current)
+
+            # if there is a neighbor not yet in path list, push to
+            # stack in descending order (so they pop in ascending order)
+            for index in range(len(self.adj_matrix[current])-1, -1, -1):
+                if self.adj_matrix[current][index] >= 1:
+                    neighbor = index
+                    if neighbor not in path_list:
+                        stack.append(neighbor)
+
+        return path_list
+
+    def bfs(self, v_start, v_end=None) -> list:
         """
-        TODO: Write this implementation
+        Takes an starting vertice (v_start) and
+        an optional ending vertice (v_end) and
+        performs a breadth-first search. Returns a 
+        list of vertices in the order they were
+        visited.
         """
-        pass
+        path_list = []
+
+        if v_start < 0 or v_start >= self.v_count:
+            return path_list
+
+        if v_end is None or v_end < 0 or v_end >= self.v_count:
+            v_end = None
+
+        if v_start == v_end:
+            path_list.append(v_start)
+            return path_list
+
+        # push starting vertice onto queue (using deque)
+        current = v_start
+        queue = deque([current])
+
+        # while queue not empty
+        while queue and current != v_end:
+            current = queue.popleft()
+            if current not in path_list:
+                path_list.append(current)
+
+         # if there is a neighbor not yet in path list, push to
+            # queue in ascending order (so they pop ascending)
+            for index in range(0, len(self.adj_matrix[current])):
+                if self.adj_matrix[current][index] >= 1:
+                    neighbor = index
+                    if neighbor not in path_list:
+                        queue.append(neighbor)
+
+        return path_list
 
     def has_cycle(self):
         """
@@ -223,7 +296,6 @@ if __name__ == '__main__':
     for path in test_cases:
         print(path, g.is_valid_path(path))
 
-    """
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -231,6 +303,8 @@ if __name__ == '__main__':
     g = DirectedGraph(edges)
     for start in range(5):
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
+
+    """
 
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")

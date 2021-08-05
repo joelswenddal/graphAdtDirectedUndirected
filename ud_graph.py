@@ -3,7 +3,7 @@
 # Assignment: 6
 # Description: Undirected Graph Implementation -- using Adjacency List
 
-import heapq
+
 from collections import deque
 
 
@@ -173,8 +173,9 @@ class UndirectedGraph:
 
     def dfs(self, v_start, v_end=None) -> list:
         """
-        Return list of vertices visited during DFS search
-        Vertices are picked in alphabetical order
+        Takes a starting vertex and optional ending
+        vertice. Returns list of vertices visited during 
+        DFS search. Vertices are picked in alphabetical order
         """
         path_list = []
 
@@ -226,7 +227,7 @@ class UndirectedGraph:
 
         # push starting vertice into queue
         current = v_start
-        queue = deque(current)
+        queue = deque([current])
 
         # while queue not empty
         while queue and current != v_end:
@@ -338,7 +339,7 @@ class UndirectedGraph:
 
         # push starting vertice into queue
         current = v_start
-        queue = deque(current)
+        queue = deque([current])
 
         # while queue not empty
         while queue:
