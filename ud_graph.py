@@ -119,7 +119,9 @@ class UndirectedGraph:
         if not self.adj_list:
             return []
 
-        return self.adj_list.keys()
+        vertice_list = list(self.adj_list.keys())
+
+        return vertice_list
 
     def get_edges(self) -> list:
         """
