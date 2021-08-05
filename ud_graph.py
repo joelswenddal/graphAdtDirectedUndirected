@@ -169,7 +169,7 @@ class UndirectedGraph:
 
         return True
 
-    def dfs(self, v_start, v_end=None) -> []:
+    def dfs(self, v_start, v_end=None) -> list:
         """
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
@@ -245,6 +245,56 @@ class UndirectedGraph:
         """
         Return number of connected componets in the graph
         """
+        visited_dict = {}
+        vertices = self.get_vertices()
+        # visited dictionary to track visited vertices
+        # initialize all to False
+        for each in vertices:
+            visited_dict[each] = False
+
+        connected_count = 0
+
+        # check each vertice
+        for each in vertices:
+            # if it has not yet been visited, run dfs + update
+            #  the visits dict
+            if visited_dict[each] == False:
+                self.dfs_helper(each, visited_dict)
+                connected_count += 1
+
+        return connected_count
+
+    def dfs_helper(self, v_start, visited_dict) -> None:
+        """
+        DFS helper function count_connected_components.
+        Takes a starting point and a list of bools indicating
+        vertices that have been visited. Updates dict to True
+        for any vertices visited during the dfs.
+        """
+
+        visited_dict[v_start] = True
+        path_list = []
+
+        if v_start not in self.adj_list:
+            return None
+
+        # push starting vertice onto stack
+        current = v_start
+        stack = [current]
+
+        # while stack not empty
+        while stack:
+            current = stack.pop()
+            if current not in path_list:
+                path_list.append(current)
+                visited_dict[current] = True
+
+            for neighbor in self.adj_list[current]:
+
+                if neighbor not in path_list:
+                    stack.append(neighbor)
+
+        return None
 
     def has_cycle(self):
         """
@@ -306,11 +356,6 @@ if __name__ == '__main__':
         v1, v2 = test_cases[i], test_cases[-1 - i]
         print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
 
-    """
-    
-    
-
-
     print("\nPDF - method count_connected_components() example 1")
     print("---------------------------------------------------")
     edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
@@ -326,6 +371,8 @@ if __name__ == '__main__':
         g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
         print(g.count_connected_components(), end=' ')
     print()
+
+    """
 
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
