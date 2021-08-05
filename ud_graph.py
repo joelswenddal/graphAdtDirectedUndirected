@@ -268,7 +268,7 @@ class UndirectedGraph:
 
     def dfs_helper(self, v_start, visited_dict) -> None:
         """
-        DFS helper function count_connected_components.
+        DFS helper function for count_connected_components() method.
         Takes a starting point and a list of bools indicating
         vertices that have been visited. Updates dict to True
         for any vertices visited during the dfs.
@@ -302,6 +302,65 @@ class UndirectedGraph:
         """
         Return True if graph contains a cycle, False otherwise
         """
+
+        visited_dict = {}
+        vertices = self.get_vertices()
+        # visited dictionary to track visited vertices
+        # initialize all to False
+
+        for each in vertices:
+
+            if self.bfs_helper(each):
+                return True
+
+        return False
+
+    def bfs_helper(self, v_start) -> bool:
+        """
+        BFS helper function for has_cycle() method.
+        Takes a starting point and a list of bools indicating
+        vertices that have been visited. Updates dict to True
+        for any vertices visited during the dfs.
+        """
+
+        if v_start not in self.adj_list:
+            return False
+
+        vertices = self.get_vertices()
+
+        # initialize visit tracking dict
+        visited_dict = {}
+        for each in vertices:
+            visited_dict[each] = False
+
+        # initialize parent tracking dict
+        parent_dict = {}
+        for each in vertices:
+            parent_dict[each] = None
+
+        visited_dict[v_start] = True
+
+        # push starting vertice into queue
+        current = v_start
+        queue = deque(current)
+
+        # while queue not empty
+        while queue:
+            current = queue.popleft()
+
+            for neighbor in self.adj_list[current]:
+                # case: neighbor has not yet been visited
+                if not visited_dict[neighbor]:
+                    visited_dict[neighbor] = True
+                    queue.append(neighbor)
+                    parent_dict[neighbor] = current
+
+                # case: neighbor has already been visited
+                # current's parent is not the neighbor
+                elif parent_dict[current] != neighbor:
+                    return True
+
+        return False
 
 
 if __name__ == '__main__':
@@ -374,8 +433,6 @@ if __name__ == '__main__':
         print(g.count_connected_components(), end=' ')
     print()
 
-    """
-
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
     edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
@@ -391,4 +448,3 @@ if __name__ == '__main__':
         u, v = edge
         g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
         print('{:<10}'.format(case), g.has_cycle())
-    """
