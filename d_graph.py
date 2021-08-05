@@ -52,33 +52,78 @@ class DirectedGraph:
 
     def add_vertex(self) -> int:
         """
-        TODO: Write this implementation
+        Adds a new vertex to the graph. Returns
+        an integer representing the updated number of
+        integers in the graph.
         """
-        pass
+        self.v_count += 1
+
+        new_node = [0 for each in range(0, self.v_count)]
+
+        self.adj_matrix.append(new_node)
+
+        if self.v_count > 1:
+            for node in self.adj_matrix:
+                if len(node) < self.v_count:
+                    for index in range(len(node), self.v_count):
+                        node.append(0)
+
+        return self.v_count
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
-        TODO: Write this implementation
+        Takes a source vertice, destination vertice, and weight 
+        and adds a directional edge from the first to the second with
+        the indicated weight.
         """
-        pass
+        if (src >= self.v_count) or (dst >= self.v_count) or (weight < 1) or (src == dst):
+            return None
+
+        self.adj_matrix[src][dst] = weight
+
+        return None
 
     def remove_edge(self, src: int, dst: int) -> None:
         """
-        TODO: Write this implementation
+        Takes a source and destination vertice and
+        remove the edge between them if it exists
+        in the graph and if both vertices exist.
         """
-        pass
+        if (src >= self.v_count) or (dst >= self.v_count) or (src == dst):
+            return None
+
+        self.adj_matrix[src][dst] = 0
+
+        return None
 
     def get_vertices(self) -> []:
         """
-        TODO: Write this implementation
+        Returns a list of the vertices of the graph.
         """
-        pass
+        vertices = [x for x in range(0, self.v_count)]
+        return vertices
 
     def get_edges(self) -> []:
         """
-        TODO: Write this implementation
+        Returns a list of the edges of the graph. Each
+        edge is represented as a tuple with the first element
+        being the source node index, the second being the
+        destination node index, and the third being the
+        weight of the edge.
         """
-        pass
+
+        node_index = 0
+        edge_index = 0
+        result_list = []
+
+        for node_index in range(0, self.v_count):
+            for edge_index in range(0, self.v_count):
+                if self.adj_matrix[node_index][edge_index] > 0:
+                    edge_tup = (node_index, edge_index,
+                                self.adj_matrix[node_index][edge_index])
+                    result_list.append(edge_tup)
+
+        return result_list
 
     def is_valid_path(self, path: []) -> bool:
         """
@@ -136,6 +181,8 @@ if __name__ == '__main__':
     g = DirectedGraph(edges)
     print(g.get_edges(), g.get_vertices(), sep='\n')
 
+    """
+
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -181,3 +228,4 @@ if __name__ == '__main__':
     print('\n', g)
     for i in range(5):
         print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    """
