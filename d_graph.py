@@ -96,14 +96,14 @@ class DirectedGraph:
 
         return None
 
-    def get_vertices(self) -> []:
+    def get_vertices(self) -> list:
         """
         Returns a list of the vertices of the graph.
         """
         vertices = [x for x in range(0, self.v_count)]
         return vertices
 
-    def get_edges(self) -> []:
+    def get_edges(self) -> list:
         """
         Returns a list of the edges of the graph. Each
         edge is represented as a tuple with the first element
@@ -125,11 +125,44 @@ class DirectedGraph:
 
         return result_list
 
-    def is_valid_path(self, path: []) -> bool:
+    def is_valid_path(self, path: list) -> bool:
         """
-        TODO: Write this implementation
+        Takes a list of vertices and returns True
+        if the sequence of vertices represents a valid
+        path in the graph. An empty path is considered
+        valid in this scenario.
         """
-        pass
+        # if path is empty
+        if not path:
+            return True
+
+        path_length = len(path)
+
+        # if a path node is not in the graph
+        for node in path:
+            if node < 0 or node >= self.v_count:
+                return False
+        # if only one node in path
+        if path_length == 1:
+            return True
+
+        current = 0
+        next = current + 1
+
+        # track through each node in path
+        # if there is an edge in a node's
+        # list pointing to the next node,
+        # then continue, otherwise False
+        # there is no edge between those nodes
+        while next < len(path):
+            step = path[current]
+            next_step = path[next]
+            if self.adj_matrix[step][next_step] <= 0:
+                return False
+            current += 1
+            next += 1
+
+        return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -181,8 +214,6 @@ if __name__ == '__main__':
     g = DirectedGraph(edges)
     print(g.get_edges(), g.get_vertices(), sep='\n')
 
-    """
-
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -192,6 +223,7 @@ if __name__ == '__main__':
     for path in test_cases:
         print(path, g.is_valid_path(path))
 
+    """
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
