@@ -142,7 +142,7 @@ class UndirectedGraph:
 
         return edge_list
 
-    def is_valid_path(self, path: []) -> bool:
+    def is_valid_path(self, path: list) -> bool:
         """
         Return true if provided path is valid, False otherwise
         """
@@ -174,12 +174,72 @@ class UndirectedGraph:
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
         """
+        path_list = []
 
-    def bfs(self, v_start, v_end=None) -> []:
+        if v_start not in self.adj_list:
+            return path_list
+
+        if v_end not in self.adj_list:
+            v_end = None
+
+        if v_end == v_start:
+            path_list.append(v_start)
+            return path_list
+
+        # push starting vertice onto stack
+        current = v_start
+        stack = [current]
+
+        # while stack not empty
+        while stack and current != v_end:
+            current = stack.pop()
+            if current not in path_list:
+                path_list.append(current)
+
+            sorted_list = sorted(self.adj_list[current], reverse=True)
+
+            for neighbor in sorted_list:
+
+                if neighbor not in path_list:
+                    stack.append(neighbor)
+
+        return path_list
+
+    def bfs(self, v_start, v_end=None) -> list:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
+        path_list = []
+
+        if v_start not in self.adj_list:
+            return path_list
+
+        if v_end not in self.adj_list:
+            v_end = None
+
+        if v_end == v_start:
+            path_list.append(v_start)
+            return path_list
+
+        # push starting vertice into queue
+        current = v_start
+        queue = deque(current)
+
+        # while queue not empty
+        while queue and current != v_end:
+            current = queue.popleft()
+            if current not in path_list:
+                path_list.append(current)
+
+            sorted_list = sorted(self.adj_list[current], reverse=False)
+
+            for neighbor in sorted_list:
+
+                if neighbor not in path_list:
+                    queue.append(neighbor)
+
+        return path_list
 
     def count_connected_components(self):
         """
@@ -234,7 +294,6 @@ if __name__ == '__main__':
     for path in test_cases:
         print(list(path), g.is_valid_path(list(path)))
 
-    """
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
     edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
@@ -246,6 +305,11 @@ if __name__ == '__main__':
     for i in range(1, len(test_cases)):
         v1, v2 = test_cases[i], test_cases[-1 - i]
         print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
+
+    """
+    
+    
+
 
     print("\nPDF - method count_connected_components() example 1")
     print("---------------------------------------------------")
