@@ -76,7 +76,7 @@ class DirectedGraph:
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
-        Takes a source vertice, destination vertice, and weight 
+        Takes a source vertice, destination vertice, and weight
         and adds a directional edge from the first to the second with
         the indicated weight.
         """
@@ -172,7 +172,7 @@ class DirectedGraph:
         """
         Takes an starting vertice (v_start) and
         an optional ending vertice (v_end) and
-        performs a depth-first search. Returns a 
+        performs a depth-first search. Returns a
         list of vertices in the order they were
         visited.
         """
@@ -213,7 +213,7 @@ class DirectedGraph:
         """
         Takes an starting vertice (v_start) and
         an optional ending vertice (v_end) and
-        performs a breadth-first search. Returns a 
+        performs a breadth-first search. Returns a
         list of vertices in the order they were
         visited.
         """
@@ -252,7 +252,7 @@ class DirectedGraph:
     def has_cycle(self):
         """
         Returns True if there is at least one cycle
-        in the graph.
+        in the graph. Otherwise, returns False.
         """
         explored_list = []
         currently_explored_list = []
@@ -269,7 +269,10 @@ class DirectedGraph:
         return False
 
     def has_cycle_rec(self, current, explored_list, currently_explored_list):
-        """Recursive helper for has_cycle() method."""
+        """Recursive helper for has_cycle() method. Takes
+        a current vertice, a list of explored vertices, and
+        a list of vertices currently being explored. This
+        is using a recursive, depth-first search approach."""
         # current node marked as explored
         explored_list[current] = True
         # current node marked as currently being explored
@@ -281,7 +284,7 @@ class DirectedGraph:
             if self.adj_matrix[current][index] > 0:
                 neighbor_list.append(index)
 
-        # if descendant is visited and also is being explored, then
+        # if descendant has been visited and also is being explored, then
         # there is a cycle
         for neighbor in neighbor_list:
             if explored_list[neighbor] == False:
@@ -296,9 +299,54 @@ class DirectedGraph:
 
     def dijkstra(self, src: int) -> list:
         """
-        TODO: Write this implementation
+        Takes a source vertex and calculates the shortest path
+        from a given vertex to all other vertices in the graph.
+        Returns a list showing the shortest path to each
+        vertex from the source. In returned list, the value at
+        index 0 is the length of the shortest path from the source
+        vertex to index 0, the value at index 1 is the length of 
+        the path to index 1, etc. If a value is not reachable from
+        the source, the returned value is 'inf'.
         """
-        pass
+        # fill a dictionary with keys representing each
+        # vertex in graph (0...graph_length - 1), and values
+        # representing calculated distances from the source
+        # (initialized to float('inf'))
+        visited_dict = {vertex: float('inf')
+                        for vertex in range(0, self.v_count)}
+        # enter the src node into the visited dictionary with
+        # distance 0
+        visited_dict[src] = 0
+        # push the source node into the priority queue
+        heap = [(0, src)]
+
+        while len(heap) > 0:
+            # pop the lowest valued distance from the priority queue
+            current_distance, current_node = heapq.heappop(heap)
+
+            # processing a node - if the current distance is less
+            # than the saved one (in the visited dictionary)
+            if current_distance <= visited_dict[current_node]:
+                # identify the descendant neighbors and their distances
+                # from the current node
+                for index in range(0, self.v_count):
+                    neighbor_distance = self.adj_matrix[current_node][index]
+                    if neighbor_distance > 0:
+                        neighbor = index
+                        # identify what the new distance to the descendant
+                        # neighbor would be
+                        new_distance = current_distance + neighbor_distance
+                        # if the new distance is less than the one on record
+                        # for the descendant neighbor, enter the new lower
+                        # distance in the visited dict for the neighbor,
+                        # then push it into the priority queue
+                        if new_distance < visited_dict[neighbor]:
+                            visited_dict[neighbor] = new_distance
+                            heapq.heappush(heap, (new_distance, neighbor))
+
+        distances_list = list(visited_dict.values())
+
+        return distances_list
 
 
 if __name__ == '__main__':
@@ -360,7 +408,6 @@ if __name__ == '__main__':
         print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
 
-    """
     print("\nPDF - dijkstra() example 1")
     print("--------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -372,4 +419,3 @@ if __name__ == '__main__':
     print('\n', g)
     for i in range(5):
         print(f'DIJKSTRA {i} {g.dijkstra(i)}')
-    """
