@@ -251,11 +251,50 @@ class DirectedGraph:
 
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        Returns True if there is at least one cycle
+        in the graph.
         """
-        pass
+        explored_list = []
+        currently_explored_list = []
+        for index in range(0, self.v_count):
+            explored_list.append(False)
+            currently_explored_list.append(False)
 
-    def dijkstra(self, src: int) -> []:
+        for index in range(0, self.v_count):
+            # returns true if graph has a cycle
+            if explored_list[index] == False:
+                if self.has_cycle_rec(index, explored_list, currently_explored_list) == True:
+                    return True
+
+        return False
+
+    def has_cycle_rec(self, current, explored_list, currently_explored_list):
+        """Recursive helper for has_cycle() method."""
+        # current node marked as explored
+        explored_list[current] = True
+        # current node marked as currently being explored
+        currently_explored_list[current] = True
+        neighbor_list = []
+
+        # identify descendants
+        for index in range(0, len(self.adj_matrix[current])):
+            if self.adj_matrix[current][index] > 0:
+                neighbor_list.append(index)
+
+        # if descendant is visited and also is being explored, then
+        # there is a cycle
+        for neighbor in neighbor_list:
+            if explored_list[neighbor] == False:
+                if self.has_cycle_rec(neighbor, explored_list, currently_explored_list) == True:
+                    return True
+
+            elif currently_explored_list[neighbor] == True:
+                return True
+        # mark as not currently being explored
+        currently_explored_list[current] = False
+        return False
+
+    def dijkstra(self, src: int) -> list:
         """
         TODO: Write this implementation
         """
@@ -304,8 +343,6 @@ if __name__ == '__main__':
     for start in range(5):
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
 
-    """
-
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
@@ -317,12 +354,13 @@ if __name__ == '__main__':
         g.remove_edge(src, dst)
         print(g.get_edges(), g.has_cycle(), sep='\n')
 
-    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
-    for src, dst in edges_to_add:
-        g.add_edge(src, dst)
+    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0, 99)]
+    for src, dst, *weight in edges_to_add:
+        g.add_edge(src, dst, *weight)
         print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
 
+    """
     print("\nPDF - dijkstra() example 1")
     print("--------------------------")
     edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
