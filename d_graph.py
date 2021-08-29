@@ -1,6 +1,4 @@
-# Course: CS261 - Data Structures
 # Author: Joel Swenddal
-# Assignment: 6
 # Description: Directed Graph Implementation -- using Adjacency Matrix
 
 import heapq
